@@ -84,7 +84,7 @@ Paypilot-backend/
 
 ⚙️ Setup & Installation
 1. Clone the repository
-git clone https://github.com/chandanarajasri/paypilot-AI
+git clone https://github.com/chandanarajasri/paypilot-AI.git
 cd Paypilot-backend
 
 2. Configure MySQL
