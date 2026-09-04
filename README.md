@@ -84,60 +84,48 @@ Paypilot-backend/
 
 ⚙️ Setup & Installation
 1. Clone the repository
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/chandanarajasri/paypilot-AI
 cd Paypilot-backend
+
 2. Configure MySQL
-
 Create a MySQL database named:
-
 CREATE DATABASE paypilot;
-
 Update application.properties with your local MySQL credentials.
 
 3. Configure API Keys
-
 Set the following environment variables:
-
 GEMINI_API_KEY=your_gemini_api_key
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-
 Never commit API keys, passwords, or other secrets to GitHub.
 
 4. Run the application
-
 Using Maven:
-
 ./mvnw spring-boot:run
 
 On Windows:
-
 mvnw.cmd spring-boot:run
 
 The application runs on:
-
 http://localhost:8081
+
 💡 Example Prompts
-
 Try PayPilot with requests such as:
-
 Headphones under ₹3000
 Power bank for travel
 Laptop under ₹60000
 Gift under ₹2000
-🔐 Security
 
+🔐 Security
 PayPilot keeps sensitive credentials outside the source code using environment variables.
 
 The project also uses:
-
 Payment signature verification
 Audit logging
 Git secret protection through .gitignore
+
 🎯 Problem Solved
-
 Traditional shopping search requires users to manually compare multiple products, prices, and features.
-
 PayPilot simplifies this process by acting as an AI shopping copilot that understands the user's intent and helps them make a faster and more informed purchase decision.
 
 🚀 Future Improvements
@@ -147,16 +135,9 @@ More advanced product comparison
 Personalized shopping history
 Real-time discounts and offers
 Multi-store product comparison
-👨‍💻 Project
 
+👨‍💻 Project
 Built as part of the Razorpay AI Buildathon.
 
 ⭐ If you find PayPilot interesting, consider giving the repository a star!
 
-
-### One important change
-
-In this line:
-
-```text
-git clone YOUR_GITHUB_REPOSITORY_URL
