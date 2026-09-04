@@ -1,0 +1,3907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PayPilot AI — Your AI Shopping Copilot</title>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #070b17;
+            --panel: #0e1528;
+            --panel-light: #121b31;
+            --border: rgba(255,255,255,0.09);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --blue: #5b8cff;
+            --purple: #8b5cf6;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+        }
+
+        body {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 0%,
+                    rgba(91,140,255,0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(139,92,246,0.16),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+
+            backdrop-filter: blur(18px);
+
+            background:
+                rgba(7,11,23,0.78);
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .nav {
+            max-width: 1180px;
+            margin: auto;
+            padding: 18px 24px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            font-size: 21px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(91,140,255,0.28);
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(34,197,94,0.08);
+
+            border:
+                1px solid rgba(34,197,94,0.2);
+
+            color: #86efac;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 12px
+                rgba(34,197,94,0.8);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            max-width: 1180px;
+            margin: auto;
+            padding: 55px 24px 80px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            text-align: center;
+            max-width: 1060px;
+            margin: 0 auto 42px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(91,140,255,0.09);
+
+            border:
+                1px solid rgba(91,140,255,0.18);
+
+            color: #a9c2ff;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 66px);
+            line-height: 1.02;
+
+            letter-spacing: -3px;
+
+            margin-bottom: 20px;
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    90deg,
+                    #7aa2ff,
+                    #a78bfa,
+                    #c084fc
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+
+            max-width: 650px;
+            margin: auto;
+        }
+
+        /* =========================
+           SEARCH CARD
+        ========================= */
+
+        .search-card {
+            max-width: 850px;
+            margin: auto;
+
+            padding: 8px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(91,140,255,0.14),
+                    rgba(139,92,246,0.10)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.1);
+
+            box-shadow:
+                0 25px 80px
+                rgba(0,0,0,0.3);
+        }
+
+        .search-inner {
+            background: var(--panel);
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .ai-signals {
+    margin: 8px 0 12px;
+}
+/* Enhanced Recommendation Tags */
+.verdict-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.verdict-great { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+.verdict-good { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+.ai-reasoning-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    .ai-reasoning-grid { grid-template-columns: 1fr; }
+}
+
+.reasoning-box {
+    background: #0d172b;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.reasoning-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reasoning-text {
+    font-size: 12px;
+    color: #e2e8f0;
+    line-height: 1.4;
+}
+
+.signal {
+    padding: 5px 0;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+        .quick-prompts {
+            margin-top: 5px;
+            padding: 0 14px 12px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .quick-prompts-title {
+            flex: 0 0 100%;
+            margin: 0 0 2px;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .quick-prompts button {
+            margin: 0;
+            padding: 9px 14px;
+
+            border: 1px solid #263654;
+            border-radius: 20px;
+
+            background: #101b30;
+            color: #dbe7ff;
+
+            font-size: 12px;
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .quick-prompts button:hover {
+            border-color: #3b82f6;
+            background: #17284a;
+        }
+
+
+        /* =========================
+           PAYPILOT INTELLIGENCE
+        ========================= */
+
+        .recommendation-tabs {
+            display: flex;
+            gap: 7px;
+            margin: 0 0 15px;
+            padding: 4px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+        }
+
+        .recommendation-tab {
+            flex: 1;
+            padding: 9px 8px;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .recommendation-tab:hover {
+            transform: none;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .recommendation-tab.active {
+            color: white;
+            background: rgba(91,140,255,0.16);
+            border-color: rgba(91,140,255,0.28);
+        }
+
+        .signal {
+            padding: 5px 0;
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ai-signals {
+            margin: 8px 0 12px;
+            padding: 11px 13px;
+            border-radius: 12px;
+            background: rgba(91,140,255,0.045);
+            border: 1px solid rgba(91,140,255,0.12);
+        }
+
+        .savings-card {
+            margin-top: 16px;
+            padding: 15px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #10251f, #0d1d1a);
+            border: 1px solid #245c4d;
+        }
+
+        .savings-header {
+            margin-bottom: 11px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .savings-row, .savings-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            color: #aebbd0;
+            font-size: 12px;
+        }
+
+        .savings-row strong { color: #fff; }
+        .savings-highlight strong { color: #4ade80; }
+
+        .savings-divider {
+            height: 1px;
+            margin: 8px 0;
+            background: #24453d;
+        }
+
+        .savings-total {
+            color: #fff;
+            font-weight: 850;
+        }
+
+        .savings-total strong {
+            color: #4ade80;
+            font-size: 16px;
+        }
+
+        .offer-note {
+            margin-top: 9px;
+            color: #86efac;
+            font-size: 10px;
+        }
+
+        .compare-section { margin-top: 18px; }
+
+        .compare-title {
+            margin-bottom: 9px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .alternative-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 11px;
+            margin-bottom: 7px;
+            border-radius: 11px;
+            background: #0e192c;
+            border: 1px solid #24334e;
+        }
+
+        .alternative-name {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .alternative-price {
+            margin-top: 3px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .alternative-tag {
+            flex-shrink: 0;
+            padding: 4px 8px;
+            border-radius: 10px;
+            background: #17284a;
+            color: #93c5fd;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .intelligence-card {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 14px;
+            background: #0c1629;
+            border: 1px solid #263654;
+        }
+
+        .intelligence-title {
+            margin-bottom: 14px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .score-row {
+            display: grid;
+            grid-template-columns: 105px 1fr 32px;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 10px;
+            color: #aebbd0;
+            font-size: 10px;
+        }
+
+        .score-row strong { color: #fff; text-align: right; }
+
+        .score-bar {
+            height: 6px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #1e293b;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+        }
+
+        .confidence {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 11px;
+            border-top: 1px solid #1e293b;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .confidence strong { color: #4ade80; }
+
+        .fastest-note {
+            margin: -7px 0 12px;
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        .recommendation-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 14px 0;
+    flex-wrap: wrap;
+}
+
+.recommendation-tab {
+    border: 1px solid #263654;
+    background: #101a2e;
+    color: #aebbd0;
+
+    padding: 8px 14px;
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.recommendation-tab:hover {
+    border-color: #4f7cff;
+    color: #ffffff;
+}
+
+.recommendation-tab.active {
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    border-color: transparent;
+    color: #ffffff;
+}
+
+        .activity-summary {
+    margin-bottom: 22px;
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        145deg,
+        #111c33,
+        #0d172b
+    );
+
+    border: 1px solid #263654;
+}
+
+.activity-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.activity-title > span {
+    font-size: 25px;
+}
+
+.activity-title h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.activity-title p {
+    margin: 3px 0 0;
+    color: #71809b;
+    font-size: 12px;
+}
+
+.activity-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.activity-stat {
+    padding: 16px 12px;
+
+    border-radius: 12px;
+
+    background: #0a1325;
+
+    border: 1px solid #1d2b45;
+
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+
+    font-size: 24px;
+    font-weight: 800;
+
+    color: #ffffff;
+
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    display: block;
+
+    color: #7f8da8;
+
+    font-size: 11px;
+}
+
+        .payment-success {
+    margin-top: 20px;
+    padding: 28px;
+    border-radius: 18px;
+    text-align: center;
+    background: linear-gradient(
+        145deg,
+        #0f2a24,
+        #102d27
+    );
+    border: 1px solid #1f8f70;
+}
+
+.success-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #16a34a;
+    color: white;
+
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.payment-success h2 {
+    margin: 0 0 8px;
+    color: #ffffff;
+}
+
+.success-amount {
+    margin: 0 0 8px;
+    color: #d1fae5;
+    font-size: 18px;
+}
+
+.payment-id {
+    margin: 0 0 20px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.payment-id strong {
+    color: #ffffff;
+}
+
+.continue-shopping-btn {
+    border: none;
+    padding: 11px 22px;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.continue-shopping-btn:hover {
+    background: #1d4ed8;
+}
+
+        .cart-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #172033;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.quantity-btn:hover {
+    background: #263451;
+}
+
+.quantity-value {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.remove-btn {
+    margin-left: 8px;
+    border: none;
+    background: transparent;
+    color: #ff6b81;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    color: #ff405f;
+    text-decoration: underline;
+}
+
+        .ai-response {
+    margin-top: 18px;
+    padding: 0 4px;
+
+    font-size: 16px;
+    line-height: 1.65;
+
+    white-space: pre-line;
+}
+
+.ai-response p {
+    margin: 8px 0;
+}
+       
+
+        .add-to-cart-btn {
+    margin-top: 16px;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+.add-to-cart-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.add-to-cart-btn.added {
+    background: #059669;
+}
+
+        input {
+            flex: 1;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            border:
+                1px solid var(--border);
+
+            color: white;
+
+            border-radius: 11px;
+
+            padding: 15px 17px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color:
+                rgba(91,140,255,0.6);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(91,140,255,0.08);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+
+            font-weight: 800;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s,
+                opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .ask-btn {
+            padding: 0 24px;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 10px 30px
+                rgba(91,140,255,0.25);
+        }
+
+        .loading {
+            color: #9db7ff;
+            font-size: 13px;
+
+            margin: 14px 5px 0;
+        }
+
+        /* =========================
+           MAIN GRID
+        ========================= */
+
+        .main-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.15fr
+                0.85fr;
+
+            gap: 22px;
+
+            margin-top: 28px;
+        }
+
+        .panel {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(18,27,49,0.96),
+                    rgba(10,16,31,0.96)
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 18px 50px
+                rgba(0,0,0,0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .panel-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                rgba(91,140,255,0.12);
+        }
+
+        .panel-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+        }
+
+        /* =========================
+           AI RECOMMENDATION
+        ========================= */
+
+        .ai-empty {
+            min-height: 260px;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+        .ai-empty-icon {
+            font-size: 42px;
+            margin-bottom: 14px;
+        }
+
+        .ai-empty strong {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .recommendation-box {
+            animation: fadeIn 0.35s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-highlight {
+            display: flex;
+            gap: 17px;
+
+            padding: 17px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid var(--border);
+
+            margin-bottom: 17px;
+        }
+
+        .product-image {
+            width: 82px;
+            height: 82px;
+
+            border-radius: 13px;
+
+            object-fit: cover;
+            object-position: center;
+
+            background: #172554;
+            display: block;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: 850;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: 850;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #7aa2ff,
+                    #c084fc
+                );
+
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .product-category {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .match-badge {
+            display: inline-flex;
+
+            margin-top: 10px;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(34,197,94,0.09);
+
+            color: #86efac;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .why-title {
+    margin-top: 16px;
+    margin-bottom: 6px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: #f1f5ff;
+}
+
+.ai-response {
+    margin-top: 0;
+    padding: 0 4px;
+
+    color: #dbe7ff;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    text-align: left;
+}
+.ai-response p {
+    margin: 0 0 10px;
+}
+
+.ai-response strong {
+    color: #ffffff;
+}
+
+        /* =========================
+           CART
+        ========================= */
+
+        .cart-list {
+            min-height: 170px;
+        }
+
+        .empty-cart {
+            min-height: 170px;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+        .empty-cart-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+
+            align-items: center;
+            gap: 13px;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 11px;
+
+            object-fit: cover;
+
+            background: #172554;
+        }
+
+        .cart-info {
+            flex: 1;
+        }
+
+        .cart-name {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .cart-meta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .cart-total-item {
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+
+            padding-top: 20px;
+            margin-top: 8px;
+
+            border-top:
+                1px solid var(--border);
+
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .total-amount {
+            color: white;
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .payment-btn {
+            width: 100%;
+
+            margin-top: 18px;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            font-size: 14px;
+
+            box-shadow:
+                0 12px 35px
+                rgba(79,70,229,0.24);
+        }
+
+        /* =========================
+           PAYMENT STATUS
+        ========================= */
+
+        .status {
+            margin-top: 14px;
+
+            padding: 13px;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .success {
+            background:
+                rgba(34,197,94,0.08);
+
+            border:
+                1px solid
+                rgba(34,197,94,0.18);
+
+            color: #86efac;
+        }
+
+        .error {
+            background:
+                rgba(239,68,68,0.08);
+
+            border:
+                1px solid
+                rgba(239,68,68,0.18);
+
+            color: #fca5a5;
+        }
+
+        /* =========================
+           AUDIT
+        ========================= */
+
+        .audit-panel {
+            margin-top: 22px;
+        }
+
+        .audit-item {
+            padding: 16px;
+
+            margin-top: 11px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .audit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .audit-action {
+            font-size: 13px;
+            font-weight: 850;
+            letter-spacing: 0.2px;
+        }
+
+        .audit-status {
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .audit-verified {
+            color: #86efac;
+            background:
+                rgba(34,197,94,0.09);
+        }
+
+        .audit-failed {
+            color: #fca5a5;
+            background:
+                rgba(239,68,68,0.09);
+        }
+
+        .audit-created {
+            color: #fde68a;
+            background:
+                rgba(234,179,8,0.09);
+        }
+
+        .audit-details {
+            margin-top: 10px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.8;
+        }
+
+        .audit-details strong {
+            color: #cbd5e1;
+        }
+
+        .audit-empty {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            padding: 0 20px 35px;
+        }
+
+        footer span {
+            color: #94a3b8;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .nav {
+                padding: 15px;
+            }
+
+            .live-badge {
+                display: none;
+            }
+
+            .container {
+                padding:
+                    35px 15px 60px;
+            }
+
+            .hero {
+                margin-bottom: 28px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .search-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-prompts {
+                padding: 0 10px 10px;
+            }
+
+            .ask-btn {
+                padding: 14px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .recommendation-tabs {
+                overflow-x: auto;
+            }
+
+            .recommendation-tab {
+                min-width: 105px;
+            }
+
+            .product-highlight {
+                flex-direction: column;
+            }
+
+            .product-image {
+                width: 100%;
+                height: 150px;
+            }
+        }
+
+        /* =========================
+   WISHLIST
+========================= */
+
+.recommendation-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.recommendation-actions button {
+    flex: 1;
+}
+
+
+.wishlist-btn {
+    padding: 11px 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.04);
+
+    color: #cbd5e1;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.wishlist-btn:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.wishlist-btn.saved {
+    color: #f472b6;
+
+    border-color: rgba(244,114,182,0.4);
+
+    background: rgba(244,114,182,0.08);
+}
+
+
+/* WISHLIST SECTION */
+
+.wishlist-section {
+
+    margin-top: 28px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.wishlist-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+
+.wishlist-header strong {
+
+    display: block;
+
+    font-size: 16px;
+
+    color: #e2e8f0;
+}
+
+
+#wishlistCount {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* WISHLIST ITEM */
+
+.wishlist-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.wishlist-item:last-child {
+    border-bottom: none;
+}
+
+
+.wishlist-image {
+
+    width: 65px;
+
+    height: 65px;
+
+    object-fit: cover;
+
+    border-radius: 11px;
+
+    flex-shrink: 0;
+}
+
+
+.wishlist-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.wishlist-name {
+
+    font-weight: 700;
+
+    color: #e2e8f0;
+
+    margin-bottom: 5px;
+}
+
+
+.wishlist-price {
+
+    font-weight: 800;
+
+    color: #f8fafc;
+}
+
+
+.wishlist-category {
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+
+.wishlist-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 9px;
+}
+
+
+.wishlist-cart-btn,
+.wishlist-remove-btn {
+
+    border-radius: 8px;
+
+    padding: 7px 10px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.wishlist-cart-btn {
+
+    border: 1px solid rgba(34,197,94,0.3);
+
+    background: rgba(34,197,94,0.08);
+
+    color: #86efac;
+}
+
+
+.wishlist-remove-btn {
+
+    border: 1px solid var(--border);
+
+    background: transparent;
+
+    color: #94a3b8;
+}
+
+
+.wishlist-remove-btn:hover {
+
+    color: #f87171;
+
+    border-color: rgba(248,113,113,0.3);
+}
+
+
+/* EMPTY WISHLIST */
+
+.empty-wishlist {
+
+    text-align: center;
+
+    padding: 25px 15px;
+
+    border: 1px dashed var(--border);
+
+    border-radius: 12px;
+
+    color: var(--muted);
+}
+
+
+.empty-wishlist-icon {
+
+    font-size: 32px;
+
+    margin-bottom: 8px;
+}
+
+
+.empty-wishlist strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    margin-bottom: 5px;
+}
+
+
+.empty-wishlist span {
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .recommendation-actions {
+        flex-direction: column;
+    }
+
+    .wishlist-item {
+        align-items: flex-start;
+    }
+
+    .wishlist-actions {
+        flex-wrap: wrap;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="nav">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    PayPilot AI
+                </div>
+
+                <div class="brand-subtitle">
+                    Intelligent Shopping Copilot
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="live-badge">
+
+            <span class="live-dot"></span>
+
+            AI ONLINE
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main class="container">
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-badge">
+            ✨ AI-powered shopping intelligence
+        </div>
+
+        <h1>
+            Shop smarter with your
+            <span class="gradient-text">
+                AI Copilot
+            </span>
+        </h1>
+
+        <p>
+            Tell PayPilot what you need, your budget,
+            and your preferences. We'll find the right
+            product and help you complete your purchase securely.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <section class="search-card">
+
+        <div class="search-inner">
+
+            <input
+                id="message"
+                type="text"
+                placeholder="What are you looking for? e.g. Try: headphones under ₹3000"
+                onkeydown="
+                    if(event.key === 'Enter') askAI();
+                "
+            >
+
+            <button
+                class="ask-btn"
+                onclick="askAI()"
+            >
+                Ask PayPilot →
+            </button>
+
+        </div>
+
+        <div class="quick-prompts">
+    <div class="quick-prompts-title">✨ Try PayPilot</div>
+
+    <button type="button" onclick="usePrompt('Headphones under ₹3000')">
+        🎧 Headphones under ₹3000
+    </button>
+
+    <button type="button" onclick="usePrompt('Power bank for travel')">
+        🔋 Power bank for travel
+    </button>
+
+    <button type="button" onclick="usePrompt('Laptop bags under ₹3000')">
+        💻 Laptop bags under ₹3000
+    </button>
+
+    <button type="button" onclick="usePrompt('USB hubs under ₹2000')">
+        🔌 USB hubs under ₹2000
+    </button>
+</div>
+
+        <div
+            id="loading"
+            class="loading"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AI + CART
+    ========================= -->
+
+    <div class="main-grid">
+
+
+        <!-- AI PANEL -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+
+                    <div class="panel-icon">
+                        🤖
+                    </div>
+
+                    AI Recommendation
+
+                </div>
+
+                <div class="panel-label">
+                    PERSONALIZED
+                </div>
+
+            </div>
+
+
+            <div id="response">
+
+                <div class="ai-empty">
+
+                    <div class="ai-empty-icon">
+                        ✨
+                    </div>
+
+                    <strong>
+                        What can I help you find?
+                    </strong>
+
+                    <span>
+                        Try a product category and budget.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CART PANEL -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+
+                    <div class="panel-icon">
+                        🛒
+                    </div>
+
+                    Your Cart
+
+                </div>
+
+                <div class="panel-label">
+                    SECURE CHECKOUT
+                </div>
+
+            </div>
+
+
+            <div
+                id="cart"
+                class="cart-list"
+            >
+
+                <div class="empty-cart">
+
+                    <div class="empty-cart-icon">
+                        🛍️
+                    </div>
+
+                    <strong>
+                        Your cart is empty
+                    </strong>
+
+                    <span>
+                        Ask PayPilot to find something.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="total-row">
+
+                <span>
+                    Total
+                </span>
+
+                <span
+                    id="total"
+                    class="total-amount"
+                >
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <button
+                class="payment-btn"
+                onclick="checkout()"
+            >
+                🔒 Pay securely with Razorpay
+            </button>
+            <div class="wishlist-section">
+
+    <div class="wishlist-header">
+        <div>
+            <strong>❤️ Saved for Later</strong>
+            <span id="wishlistCount">0 items</span>
+        </div>
+    </div>
+
+    <div id="wishlist" class="wishlist-list">
+
+        <div class="empty-wishlist">
+            <div class="empty-wishlist-icon">♡</div>
+
+            <strong>No saved products</strong>
+
+            <span>
+                Save products you like and come back to them later.
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+
+            <div id="paymentStatus" class="status"></div>
+
+<div id="paymentSuccess" class="payment-success" style="display:none;">
+
+    <div class="success-icon">✓</div>
+
+    <h2>Payment Successful</h2>
+
+    <p class="success-amount">
+        ₹<span id="successAmount">0</span> paid securely
+    </p>
+
+    <p class="payment-id">
+        Payment ID:
+        <strong id="successPaymentId"></strong>
+    </p>
+
+    <button
+        class="continue-shopping-btn"
+        onclick="continueShopping()">
+        Continue Shopping
+    </button>
+
+</div>
+
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =========================
+         AUDIT
+    ========================= -->
+
+    <div class="activity-summary">
+
+    <div class="activity-title">
+        <span>📊</span>
+        <div>
+            <h3>Payment Activity</h3>
+            <p>Transaction overview</p>
+        </div>
+    </div>
+
+    <div class="activity-stats">
+
+        <div class="activity-stat">
+            <span class="stat-value" id="totalTransactions">
+                0
+            </span>
+            <span class="stat-label">
+                Total Transactions
+            </span>
+        </div>
+
+        <div class="activity-stat">
+            <span class="stat-value" id="successfulPayments">
+                0
+            </span>
+            <span class="stat-label">
+                Successful Payments
+            </span>
+        </div>
+
+        <div class="activity-stat">
+            <span class="stat-value" id="failedPayments">
+                0
+            </span>
+            <span class="stat-label">
+                Failed Payments
+            </span>
+        </div>
+
+        <div class="activity-stat">
+            <span class="stat-value" id="ordersCreated">
+                0
+            </span>
+            <span class="stat-label">
+                Orders Created
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+    <section class="panel audit-panel">
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+
+                <div class="panel-icon">
+                    🔐
+                </div>
+
+                Payment Audit
+
+            </div>
+
+            <div class="panel-label">
+                TRANSPARENT TRANSACTIONS
+            </div>
+
+        </div>
+
+
+        <p
+            style="
+                color:#94a3b8;
+                font-size:13px;
+                margin-bottom:15px;
+            "
+        >
+            Every payment action is recorded and verified
+            for transparency.
+        </p>
+
+
+        <div id="auditLogs">
+
+            <p class="audit-empty">
+                Loading audit history...
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <span>PayPilot AI</span>
+    · Intelligent shopping
+    · Secure payments
+    · Transparent audit
+
+</footer>
+
+
+
+<script>
+
+
+function getProductImage(product) {
+
+    const name =
+        (product?.productName || product?.name || "")
+            .toLowerCase();
+
+    const imageUrl =
+        product?.imageUrl || "";
+
+    // Use database image if it is a real image
+    if (
+        imageUrl.trim() !== "" &&
+        !imageUrl.includes("via.placeholder.com")
+    ) {
+        return imageUrl;
+    }
+
+    // HEADPHONES
+    if (
+        name.includes("headphone") ||
+        name.includes("soundmax")
+    ) {
+        return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80";
+    }
+
+    // POWER BANK
+    if (
+        name.includes("powerbank") ||
+        name.includes("power bank")
+    ) {
+        return "https://images.unsplash.com/photo-1609592424824-9e8b7a1e7a76?auto=format&fit=crop&w=500&q=80";
+    }
+
+    // Generic product
+    return "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80";
+}
+
+
+function usePrompt(text) {
+
+    document.getElementById("message").value = text;
+
+    document.getElementById("message").focus();
+}
+
+
+/* =========================
+   AI RECOMMENDATION
+========================= */
+function cleanAIResponse(text) {
+
+    if (!text) {
+        return "";
+    }
+
+    return text
+        // Remove markdown bold/italic
+        .replace(/\*{1,3}/g, "")
+
+        // Remove markdown bullets
+        .replace(/^\s*[\*\-•]\s+/gm, "")
+
+        // Put "Why it's a great match:" on a new line
+        .replace(
+            /\s*Why\s+(it['’]s)\s+a\s+great\s+match\s*:/i,
+            '<br><br><strong>Why $1 a great match:</strong>'
+        )
+
+        // Remove excessive blank lines
+        .replace(/\n\s*\n+/g, " ")
+
+        // Convert remaining newlines to spaces
+        .replace(/\n/g, " ")
+
+        // Remove repeated spaces
+        .replace(/[ \t]{2,}/g, " ")
+
+        .trim();
+}
+
+let latestRecommendation = null;
+let latestRequest = "";
+
+function formatINR(value) {
+    const n = Number(value || 0);
+    return n.toLocaleString("en-IN", {
+        maximumFractionDigits: 0
+    });
+}
+
+function extractBudget(message) {
+    const match = String(message || "").match(/(?:₹|rs\.?\s*)(\d[\d,]*)/i);
+    return match ? Number(match[1].replace(/,/g, "")) : null;
+}
+
+function generateAISignals(result, message) {
+    const price = Number(result.price || 0);
+    const budget = extractBudget(message);
+    const text = (
+        (result.productName || "") + " " +
+        (result.category || "") + " " +
+        (result.description || "")
+    ).toLowerCase();
+
+    // 1. Contextual Strengths & Trade-offs
+    let standoutStrength = "Balanced performance across all basic day-to-day tasks.";
+    let tradeOff = "Standard warranty and entry-level build materials.";
+    let idealBuyer = "Everyday users looking for reliable utility without overspending.";
+
+    if (text.includes("headphone") || text.includes("earphone") || text.includes("sound")) {
+        standoutStrength = text.includes("anc") || text.includes("noise")
+            ? "Active noise suppression + clear vocal tuning for calls."
+            : "Tuned bass output with ergonomic fit for long listening sessions.";
+        tradeOff = "Microphone sensitivity dips in windy or loud outdoor spots.";
+        idealBuyer = "Daily commuters, podcast listeners, and gym-goers.";
+    } else if (text.includes("power") || text.includes("bank") || text.includes("battery")) {
+        standoutStrength = text.includes("fast")
+            ? "High-wattage output capable of quick top-ups for phones and tablets."
+            : "High charge retention with compact travel-friendly footprint.";
+        tradeOff = "Takes 3–4 hours to fully recharge the power bank itself.";
+        idealBuyer = "Frequent travelers, field workers, and backup power seekers.";
+    } else if (text.includes("bag") || text.includes("backpack")) {
+        standoutStrength = "Dedicated padded compartment with splash-resistant fabric.";
+        tradeOff = "Moderate storage depth; fits one laptop plus light accessories.";
+        idealBuyer = "College students and hybrid office workers.";
+    }
+
+    // 2. Budget status
+    let budgetPill = "";
+    if (budget !== null) {
+        if (price <= budget) {
+            const savings = budget - price;
+            budgetPill = savings > 0
+                ? `<div class="signal">🎯 <strong>Budget Win:</strong> Leaves <strong>₹${formatINR(savings)}</strong> unspent from your ₹${formatINR(budget)} limit.</div>`
+                : `<div class="signal">🎯 <strong>Budget Hit:</strong> Hits your ₹${formatINR(budget)} limit with zero waste.</div>`;
+        } else {
+            budgetPill = `<div class="signal" style="color:#fca5a5;">⚠️ <strong>Budget Note:</strong> Exceeds target by ₹${formatINR(price - budget)}, but provides higher build tier.</div>`;
+        }
+    }
+
+    return `
+        ${budgetPill}
+        <div class="ai-reasoning-grid">
+            <div class="reasoning-box">
+                <div class="reasoning-label">⚡ Top Advantage</div>
+                <div class="reasoning-text">${standoutStrength}</div>
+            </div>
+            <div class="reasoning-box">
+                <div class="reasoning-label">⚖️ Trade-off to Know</div>
+                <div class="reasoning-text">${tradeOff}</div>
+            </div>
+            <div class="reasoning-box" style="grid-column: 1 / -1;">
+                <div class="reasoning-label">👤 Best Match For</div>
+                <div class="reasoning-text">${idealBuyer}</div>
+            </div>
+        </div>
+    `;
+}
+
+function calculateScores(result, message) {
+    const price = Number(result.price || 0);
+    const budget = extractBudget(message);
+    const budgetFit = budget === null
+        ? 90
+        : Math.max(0, Math.min(100, Math.round((budget - Math.max(0, price - budget)) / budget * 100)));
+
+    const requestWords = String(message || "")
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(w => w.length >= 3 && !["under", "below", "with", "for", "the", "and"].includes(w));
+    const productText = (
+        (result.productName || "") + " " +
+        (result.category || "") + " " +
+        (result.description || "")
+    ).toLowerCase();
+    const hits = requestWords.filter(w => productText.includes(w)).length;
+    const relevance = requestWords.length
+        ? Math.min(98, Math.max(72, Math.round(70 + (hits / requestWords.length) * 28)))
+        : 90;
+    const value = budget === null
+        ? 88
+        : Math.min(97, Math.max(75, Math.round(84 + Math.min(13, ((budget - price) / Math.max(1, budget)) * 20))));
+
+    return { budgetFit, relevance, value };
+}
+
+function renderPurchaseIntelligence(result, message) {
+    const s = calculateScores(result, message);
+    const average = Math.round((s.budgetFit + s.relevance + s.value) / 3);
+    const confidence = average >= 90 ? "HIGH" : average >= 80 ? "MEDIUM" : "LOW";
+
+    return `
+        <div class="intelligence-card">
+            <div class="intelligence-title">🧠 Purchase Intelligence</div>
+            ${scoreLine("Budget Fit", s.budgetFit)}
+            ${scoreLine("Product Relevance", s.relevance)}
+            ${scoreLine("Value for Money", s.value)}
+            <div class="confidence">
+                <span>Recommendation Confidence</span>
+                <strong>${confidence}</strong>
+            </div>
+        </div>
+    `;
+}
+
+function scoreLine(label, score) {
+    return `
+        <div class="score-row">
+            <span>${label}</span>
+            <div class="score-bar"><div class="score-fill" style="width:${score}%"></div></div>
+            <strong>${score}%</strong>
+        </div>
+    `;
+}
+
+function renderSavings(result, message) {
+    const price = Number(result.price || 0);
+    const budget = extractBudget(message);
+    const saving = budget !== null && price < budget ? budget - price : 0;
+    const demoSaving = saving > 0 ? Math.min(300, Math.max(100, Math.round(saving * 0.15 / 10) * 10)) : 0;
+
+    return `
+        <div class="savings-card">
+            <div class="savings-header">💰 PayPilot Savings</div>
+            <div class="savings-row">
+                <span>Product price</span>
+                <strong>₹${formatINR(price)}</strong>
+            </div>
+            <div class="savings-row savings-highlight">
+                <span>AI detected saving</span>
+                <strong>− ₹${formatINR(demoSaving)}</strong>
+            </div>
+            <div class="savings-divider"></div>
+            <div class="savings-total">
+                <span>You save</span>
+                <strong>₹${formatINR(demoSaving)}</strong>
+            </div>
+            <div class="offer-note">🎉 Simulated demo offer · Best payment option: UPI</div>
+        </div>
+    `;
+}
+
+function renderAlternatives(result) {
+    const alternatives = Array.isArray(result.alternatives)
+        ? result.alternatives.filter(Boolean).slice(0, 3)
+        : [];
+
+    if (!alternatives.length) {
+        return `
+            <div class="compare-section">
+                <div class="compare-title">🔄 Compare Alternatives</div>
+                <div class="fastest-note">Add an <code>alternatives</code> array to the AI response to enable live comparisons.</div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="compare-section">
+            <div class="compare-title">🔄 Compare Alternatives</div>
+            ${alternatives.map((item, index) => `
+                <div class="alternative-card">
+                    <div>
+                        <div class="alternative-name">${item.name || item.productName || "Alternative"}</div>
+                        <div class="alternative-price">₹${formatINR(item.price)}</div>
+                    </div>
+                    <div class="alternative-tag">
+                        ${index === 0 ? "Best Value" : index === 1 ? "Budget Pick" : "Alternative"}
+                    </div>
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+// function setRecommendationMode(mode, button) {
+//     document.querySelectorAll(".recommendation-tab").forEach(b => b.classList.remove("active"));
+//     if (button) button.classList.add("active");
+
+//     if (!latestRecommendation) return;
+
+//     const base = latestRecommendation;
+//     const alternatives = Array.isArray(base.alternatives) ? base.alternatives : [];
+//     const candidates = [
+//         { productName: base.productName, price: base.price, category: base.category, description: base.description, productId: base.productId, imageUrl: base.imageUrl },
+//         ...alternatives
+//     ];
+
+//     let selected = candidates[0];
+//     if (mode === "cheap") {
+//         selected = candidates.slice().sort((a,b) => Number(a.price) - Number(b.price))[0] || selected;
+//     } else if (mode === "value") {
+//         const budget = extractBudget(latestRequest);
+//         selected = candidates.slice().sort((a,b) => {
+//             const av = budget ? Math.abs(budget - Number(a.price)) : Number(a.price);
+//             const bv = budget ? Math.abs(budget - Number(b.price)) : Number(b.price);
+//             return av - bv;
+//         })[0] || selected;
+//     } else if (mode === "fast") {
+//         const withDelivery = candidates.filter(x => x.deliveryTime || x.deliveryDays);
+//         if (withDelivery.length) {
+//             selected = withDelivery.slice().sort((a,b) => Number(a.deliveryDays || 999) - Number(b.deliveryDays || 999))[0];
+//         }
+//     }
+
+//     if (!selected) return;
+//     renderSelectedProduct(selected, base, latestRequest, mode);
+// }
+
+function renderSelectedProduct(product, baseResult, message, mode) {
+    const isBase = String(product.productId) === String(baseResult.productId);
+    const result = isBase ? baseResult : { ...product, recommendation: `This option is a ${mode === "cheap" ? "lower-price" : mode === "value" ? "strong-value" : "faster-delivery"} alternative to the original recommendation.` };
+    const fastestUnavailable = mode === "fast" && !(product.deliveryTime || product.deliveryDays);
+
+    const responseDiv = document.getElementById("response");
+    responseDiv.innerHTML = `
+        <div class="recommendation-box">
+            <div class="recommendation-tabs">
+                <button class="recommendation-tab ${mode === "best" ? "active" : ""}" onclick="setRecommendationMode('best', this)">✨ Best Match</button>
+                <button class="recommendation-tab ${mode === "cheap" ? "active" : ""}" onclick="setRecommendationMode('cheapest', this)">💰 Cheapest</button>
+                <button class="recommendation-tab ${mode === "value" ? "active" : ""}" onclick="setRecommendationMode('value', this)">⭐ Best Value</button>
+                <button class="recommendation-tab ${mode === "fast" ? "active" : ""}" onclick="setRecommendationMode('fastest', this)">🚚 Fastest</button>
+            </div>
+            ${fastestUnavailable ? '<div class="fastest-note">Delivery-time data is not available, so PayPilot keeps the best match.</div>' : ''}
+            <div class="product-highlight">
+                <img class="product-image" src="${getProductImage(result)}" alt="${result.productName || "Product"}" onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80'">
+                <div class="product-info">
+                    <div class="product-name">${result.productName}</div>
+                    <div class="product-price">₹${formatINR(result.price)}</div>
+                    <div class="product-category">${result.category || "Product"}</div>
+                    <div class="match-badge">✦ ${mode === "cheap" ? "CHEAPEST PICK" : mode === "value" ? "VALUE PICK" : mode === "fast" && !fastestUnavailable ? "FASTEST PICK" : "AI MATCH"}</div>
+                    <div class="recommendation-actions">
+
+    <button
+        class="add-to-cart-btn"
+        id="addCartBtn"
+        onclick="addRecommendedProduct(${result.productId})"
+    >
+        🛒 Add to Cart
+    </button>
+
+    <button
+        class="wishlist-btn"
+        id="wishlistBtn"
+        onclick="toggleWishlist(${result.productId})"
+    >
+        ♡ Save for Later
+    </button>
+
+</div>
+            </div>
+            <div class="why-title">🧠 Why PayPilot picked this</div>
+            <div class="ai-signals">${generateAISignals(result, message)}</div>
+            <div class="ai-response">${cleanAIResponse(result.recommendation)}</div>
+            ${renderSavings(result, message)}
+            ${renderAlternatives(baseResult)}
+            ${renderPurchaseIntelligence(result, message)}
+        </div>
+    `;
+}
+
+async function askAI(mode = "best") {
+
+    const message =
+        document.getElementById("message").value.trim();
+    latestRequest = message;
+
+    const responseDiv =
+        document.getElementById("response");
+
+    const loading =
+        document.getElementById("loading");
+
+    if (!message) {
+        alert("Please enter what you want to buy.");
+        return;
+    }
+
+    const modeNames = {
+        best: "✨ Best Match",
+        cheapest: "💰 Cheapest",
+        value: "⭐ Best Value",
+        fastest: "🚚 Fastest"
+    };
+
+    loading.innerText =
+        "🤖 PayPilot AI is finding " +
+        modeNames[mode] +
+        "...";
+
+    responseDiv.innerHTML = "";
+
+    try {
+
+        // Fastest is not supported yet because
+        // your Product data has no delivery-time field.
+        if (mode === "fastest") {
+
+            responseDiv.innerHTML = `
+                <div class="status error"
+                     style="display:block;">
+
+                    🚚 Fastest delivery is not available yet.
+
+                    <br>
+
+                    <small>
+                        Delivery-time data is required
+                        to calculate the fastest option.
+                    </small>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        const response =
+            await fetch(
+                "/api/ai/recommend-data?message=" +
+                encodeURIComponent(message) +
+                "&mode=" +
+                encodeURIComponent(mode)
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "AI API returned HTTP " +
+                response.status
+            );
+        }
+
+        const result =
+            await response.json();
+        latestRecommendation = result;
+
+        console.log(
+            "AI result:",
+            result
+        );
+
+        if (!result.found) {
+
+            responseDiv.innerHTML = `
+                <div class="status error"
+                     style="display:block;">
+
+                    ❌ Sorry, I couldn't find
+                    a suitable product.
+
+                </div>
+            `;
+
+            return;
+        }
+
+        responseDiv.innerHTML = `
+            <div class="recommendation-tabs">
+
+        <button
+    class="recommendation-tab ${mode === "best" ? "active" : ""}"
+    onclick="askAI('best')">
+    ✨ Best Match
+</button>
+
+<button
+    class="recommendation-tab ${mode === "cheapest" ? "active" : ""}"
+    onclick="askAI('cheapest')">
+    💰 Cheapest
+</button>
+
+<button
+    class="recommendation-tab ${mode === "value" ? "active" : ""}"
+    onclick="askAI('value')">
+    ⭐ Best Value
+</button>
+
+    </div>
+
+            <div class="recommendation-box">
+
+                <div class="product-highlight">
+
+                    <img
+                        class="product-image"
+                        src="${getProductImage(result)}"
+                        alt="${result.productName}"
+                        onerror="
+                            this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80'
+                        "
+                    >
+
+                    <div class="product-info">
+
+                        <div class="product-name">
+                            ${result.productName}
+                        </div>
+
+                        <div class="product-price">
+                            ₹${result.price}
+                        </div>
+
+                        <div class="product-category">
+                            ${result.category}
+                        </div>
+
+                        <div class="match-badge">
+                            ${modeNames[mode]}
+                        </div>
+
+                       <div class="recommendation-actions">
+    <button
+        class="add-to-cart-btn"
+        id="addCartBtn"
+        onclick="addRecommendedProduct(${result.productId})"
+    >
+        🛒 Add to Cart
+    </button>
+
+    <button
+        class="wishlist-btn"
+        id="wishlistBtn"
+        onclick="toggleWishlist(${result.productId})"
+    >
+        ♡ Save for Later
+    </button>
+</div>
+
+                    </div>
+
+                </div>
+
+                <div class="why-title">
+                    🧠 Why PayPilot picked this
+                </div>
+
+                <div class="ai-signals">
+                    ${generateAISignals(
+                        result,
+                        message
+                    )}
+                </div>
+
+                <div class="ai-response">
+
+                    ${getModeExplanation(
+                        mode,
+                        result
+                    )}
+
+                </div>
+
+            </div>
+        `;
+        updateWishlistButton(result.productId);
+
+    } catch (error) {
+
+        console.error(
+            "AI ERROR:",
+            error
+        );
+
+        responseDiv.innerHTML = `
+            <div
+                class="status error"
+                style="display:block;"
+            >
+
+                ❌ Unable to get AI recommendation.
+
+                <br>
+
+                <small>
+                    ${error.message}
+                </small>
+
+            </div>
+        `;
+        
+
+    } finally {
+
+        loading.innerText = "";
+
+    }
+}
+
+function getModeExplanation(mode, result) {
+    const name = result.productName || "This product";
+    const category = (result.category || "category").toLowerCase();
+
+    const explanations = {
+        cheapest: {
+            badge: "Lowest Entry Cost",
+            text: `Prioritizes minimal checkout cost. <strong>${name}</strong> trims auxiliary features to give you essential ${category} functionality at the absolute lowest price floor.`
+        },
+        value: {
+            badge: "Maximum Feature-per-Rupee",
+            text: `Optimized for lifespan and capability. <strong>${name}</strong> delivers the best durability-to-price ratio without paying a premium brand markup.`
+        },
+        best: {
+            badge: "Optimal Requirement Match",
+            text: `Algorithmically scores highest for your specific prompt. <strong>${name}</strong> satisfies the primary query constraints while holding an above-average customer rating.`
+        }
+    };
+
+    const current = explanations[mode] || explanations.best;
+
+    return `
+        <div style="margin-top: 14px; padding: 12px; border-left: 3px solid #5b8cff; background: rgba(91,140,255,0.06); border-radius: 0 8px 8px 0;">
+            <div style="font-size: 11px; font-weight: 800; color: #93c5fd; text-transform: uppercase;">
+                ${current.badge}
+            </div>
+            <div style="font-size: 13px; color: #cbd5e1; margin-top: 4px; line-height: 1.5;">
+                ${current.text}
+            </div>
+        </div>
+    `;
+}
+
+
+async function addRecommendedProduct(productId) {
+
+    const button =
+        document.getElementById("addCartBtn");
+
+    try {
+
+        button.disabled = true;
+
+        button.innerText =
+            "⏳ Adding...";
+
+
+        const response =
+            await fetch(
+                "/api/cart/add?productId=" +
+                productId +
+                "&quantity=1",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to add product to cart."
+            );
+
+        }
+
+
+        const result =
+            await response.text();
+
+        console.log(
+            "Cart response:",
+            result
+        );
+
+
+        button.innerText =
+            "✓ Added to Cart";
+
+
+        button.classList.add(
+            "added"
+        );
+
+
+        // Refresh cart
+        await loadCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "ADD TO CART ERROR:",
+            error
+        );
+
+        button.disabled = false;
+
+        button.innerText =
+            "🛒 Add to Cart";
+
+        alert(
+            "❌ Could not add product to cart."
+        );
+
+    }
+}
+
+async function updateCartQuantity(productId, change) {
+
+    try {
+
+        const response = await fetch(
+            "/api/cart/update?productId=" +
+            encodeURIComponent(productId) +
+            "&change=" +
+            encodeURIComponent(change),
+            {
+                method: "PUT"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to update quantity.");
+        }
+
+        await loadCart();
+
+    } catch (error) {
+
+        console.error(
+            "UPDATE CART ERROR:",
+            error
+        );
+
+        alert("❌ Could not update cart quantity.");
+    }
+}
+
+
+async function removeFromCart(productId) {
+
+    try {
+
+        const response = await fetch(
+            "/api/cart/remove?productId=" +
+            encodeURIComponent(productId),
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to remove product.");
+        }
+
+        await loadCart();
+
+    } catch (error) {
+
+        console.error(
+            "REMOVE CART ERROR:",
+            error
+        );
+
+        alert("❌ Could not remove product.");
+    }
+}
+
+
+/* =========================
+   WISHLIST
+========================= */
+
+let wishlist = JSON.parse(
+    localStorage.getItem("paypilotWishlist") || "[]"
+);
+
+
+/* SAVE / REMOVE PRODUCT */
+
+function toggleWishlist(productId) {
+
+    const id = String(productId);
+
+    const existingIndex = wishlist.findIndex(
+        item => String(item.productId) === id
+    );
+
+    if (existingIndex !== -1) {
+
+        wishlist.splice(existingIndex, 1);
+
+        localStorage.setItem(
+            "paypilotWishlist",
+            JSON.stringify(wishlist)
+        );
+
+        updateWishlistButton(productId);
+
+        loadWishlist();
+
+        return;
+    }
+
+    if (!latestRecommendation) {
+        alert("Please select a product first.");
+        return;
+    }
+
+    const product = {
+        productId: latestRecommendation.productId,
+        productName: latestRecommendation.productName,
+        price: latestRecommendation.price,
+        category: latestRecommendation.category || "Product",
+        imageUrl: latestRecommendation.imageUrl || ""
+    };
+
+    wishlist.push(product);
+
+    localStorage.setItem(
+        "paypilotWishlist",
+        JSON.stringify(wishlist)
+    );
+
+    updateWishlistButton(productId);
+
+    loadWishlist();
+}
+
+
+/* UPDATE SAVE BUTTON */
+
+function updateWishlistButton(productId) {
+
+    const button =
+        document.getElementById("wishlistBtn");
+
+    if (!button) return;
+
+    const saved = wishlist.some(
+        item =>
+            String(item.productId) ===
+            String(productId)
+    );
+
+    if (saved) {
+
+        button.innerHTML = "♥ Saved";
+        button.classList.add("saved");
+
+    } else {
+
+        button.innerHTML = "♡ Save for Later";
+        button.classList.remove("saved");
+
+    }
+}
+
+
+/* LOAD WISHLIST */
+
+function loadWishlist() {
+
+    const wishlistDiv =
+        document.getElementById("wishlist");
+
+    const count =
+        document.getElementById("wishlistCount");
+
+    if (!wishlistDiv) return;
+
+    count.innerText =
+        `${wishlist.length} ${
+            wishlist.length === 1 ? "item" : "items"
+        }`;
+
+    if (wishlist.length === 0) {
+
+        wishlistDiv.innerHTML = `
+            <div class="empty-wishlist">
+
+                <div class="empty-wishlist-icon">
+                    ♡
+                </div>
+
+                <strong>
+                    No saved products
+                </strong>
+
+                <span>
+                    Save products you like and
+                    come back to them later.
+                </span>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    wishlistDiv.innerHTML = "";
+
+    wishlist.forEach(product => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "wishlist-item";
+
+        const image =
+            getProductImage({
+                productName: product.productName,
+                imageUrl: product.imageUrl
+            });
+
+        div.innerHTML = `
+
+            <img
+                class="wishlist-image"
+                src="${image}"
+                alt="${product.productName}"
+            >
+
+            <div class="wishlist-info">
+
+                <div class="wishlist-name">
+                    ${product.productName}
+                </div>
+
+                <div class="wishlist-price">
+                    ₹${formatINR(product.price)}
+                </div>
+
+                <div class="wishlist-category">
+                    ${product.category}
+                </div>
+
+                <div class="wishlist-actions">
+
+                    <button
+                        class="wishlist-cart-btn"
+                        onclick="moveWishlistToCart(${product.productId})"
+                    >
+                        🛒 Move to Cart
+                    </button>
+
+                    <button
+                        class="wishlist-remove-btn"
+                        onclick="removeFromWishlist(${product.productId})"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        wishlistDiv.appendChild(div);
+
+    });
+}
+
+
+/* REMOVE FROM WISHLIST */
+
+function removeFromWishlist(productId) {
+
+    wishlist =
+        wishlist.filter(
+            item =>
+                String(item.productId) !==
+                String(productId)
+        );
+
+    localStorage.setItem(
+        "paypilotWishlist",
+        JSON.stringify(wishlist)
+    );
+
+    loadWishlist();
+
+    updateWishlistButton(productId);
+}
+
+
+/* MOVE WISHLIST ITEM TO CART */
+
+async function moveWishlistToCart(productId) {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/cart/add?productId=" +
+                encodeURIComponent(productId) +
+                "&quantity=1",
+                {
+                    method: "POST"
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to add product to cart."
+            );
+        }
+
+        removeFromWishlist(productId);
+
+        await loadCart();
+
+    } catch (error) {
+
+        console.error(
+            "WISHLIST CART ERROR:",
+            error
+        );
+
+        alert(
+            "❌ Could not move product to cart."
+        );
+    }
+}
+
+loadWishlist();
+
+/* =========================
+   LOAD CART
+========================= */
+
+async function loadCart() {
+
+    const cartDiv =
+        document.getElementById("cart");
+
+    try {
+
+        const response =
+            await fetch("/api/cart");
+
+        console.log("Cart API status:", response.status);
+
+        if (!response.ok) {
+            throw new Error(
+                "Cart API returned HTTP " + response.status
+            );
+        }
+
+        const cart =
+            await response.json();
+
+        console.log("Cart data:", cart);
+
+        cartDiv.innerHTML = "";
+
+        if (!Array.isArray(cart) || cart.length === 0) {
+
+            cartDiv.innerHTML = `
+                <div class="empty-cart">
+
+                    <div class="empty-cart-icon">
+                        🛍️
+                    </div>
+
+                    <strong>
+                        Your cart is empty
+                    </strong>
+
+                    <span>
+                        Ask PayPilot to add a product.
+                    </span>
+
+                </div>
+            `;
+
+            document.getElementById("total").innerText = "₹0";
+
+            return;
+        }
+
+        cart.forEach(item => {
+
+            const product = item.product;
+
+            const div =
+                document.createElement("div");
+
+            div.className = "cart-item";
+
+            const image =
+                getProductImage({
+                    productName: product.name,
+                    imageUrl: product.imageUrl
+                });
+
+            div.innerHTML = `
+    <img
+        class="cart-item-image"
+        src="${image}"
+        alt="${product.name}"
+    >
+
+    <div class="cart-info">
+
+        <div class="cart-name">
+            ${product.name}
+        </div>
+
+        <div class="cart-meta">
+            ₹${product.price}
+        </div>
+
+        <div class="cart-controls">
+
+            <button
+                class="quantity-btn"
+                onclick="updateCartQuantity(${product.id}, -1)"
+            >
+                −
+            </button>
+
+            <span class="quantity-value">
+                ${item.quantity}
+            </span>
+
+            <button
+                class="quantity-btn"
+                onclick="updateCartQuantity(${product.id}, 1)"
+            >
+                +
+            </button>
+
+            <button
+                class="remove-btn"
+                onclick="removeFromCart(${product.id})"
+            >
+                🗑 Remove
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="cart-total-item">
+        ₹${item.totalPrice}
+    </div>
+`;
+
+            cartDiv.appendChild(div);
+
+        });
+
+
+        const totalResponse =
+            await fetch("/api/cart/total");
+
+        if (!totalResponse.ok) {
+
+            throw new Error(
+                "Cart total API returned HTTP " +
+                totalResponse.status
+            );
+
+        }
+
+        const total =
+            await totalResponse.text();
+
+        document.getElementById("total").innerText =
+            "₹" + total;
+
+
+    } catch (error) {
+
+        console.error(
+            "CART ERROR:",
+            error
+        );
+
+        cartDiv.innerHTML = `
+
+            <div
+                class="status error"
+                style="display:block;"
+            >
+                ❌ Unable to load cart.
+                <br>
+                <small>
+                    ${error.message}
+                </small>
+            </div>
+
+        `;
+
+    }
+
+}
+
+function showPaymentSuccess(amount, paymentId) {
+
+    document.getElementById(
+        "successAmount"
+    ).innerText = Number(amount).toFixed(2);
+
+    document.getElementById(
+        "successPaymentId"
+    ).innerText = paymentId;
+
+    document.getElementById(
+        "paymentSuccess"
+    ).style.display = "block";
+}
+
+function continueShopping() {
+
+    document.getElementById(
+        "paymentSuccess"
+    ).style.display = "none";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+/* =========================
+   PAYMENT
+========================= */
+
+async function checkout() {
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+
+    status.style.display = "none";
+
+
+    try {
+
+        const totalResponse =
+            await fetch(
+                "/api/cart/total"
+            );
+
+
+        const total =
+            parseFloat(
+                await totalResponse.text()
+            );
+
+
+        if (total <= 0) {
+
+            alert(
+                "Your cart is empty."
+            );
+
+            return;
+        }
+
+
+        const orderResponse =
+            await fetch(
+                "/api/payment/create-order?amount=" +
+                total,
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!orderResponse.ok) {
+
+            throw new Error(
+                "Unable to create payment order"
+            );
+        }
+
+
+        const order =
+            await orderResponse.json();
+
+
+        const options = {
+
+            key:
+                "rzp_test_TUfzD5EGEgnT2G",
+
+            amount:
+                order.amount,
+
+            currency:
+                "INR",
+
+            name:
+                "PayPilot AI",
+
+            description:
+                "AI-powered shopping purchase",
+
+            order_id:
+                order.id,
+
+
+            handler:
+                async function(response) {
+
+                    try {
+
+                        const verifyResponse =
+                            await fetch(
+                                "/api/payment/verify?" +
+
+                                "orderId=" +
+                                encodeURIComponent(
+                                    response
+                                        .razorpay_order_id
+                                ) +
+
+                                "&paymentId=" +
+                                encodeURIComponent(
+                                    response
+                                        .razorpay_payment_id
+                                ) +
+
+                                "&signature=" +
+                                encodeURIComponent(
+                                    response
+                                        .razorpay_signature
+                                ),
+
+                                {
+                                    method: "POST"
+                                }
+                            );
+
+
+                        const result =
+                            await verifyResponse.text();
+
+
+                        if (
+                            result ===
+                            "PAYMENT_VERIFIED"
+                        ) {
+
+                            status.className =
+                                "status success";
+
+
+                            status.style.display =
+                                "block";
+
+
+                            status.innerHTML = `
+
+                                <strong>
+                                    ✓ Payment verified successfully
+                                </strong>
+
+                                <br>
+
+                                Payment ID:
+                                ${response.razorpay_payment_id}
+
+                            `;
+
+                            showPaymentSuccess(
+        total,
+        response.razorpay_payment_id
+    );
+
+    await loadAuditLogs();
+
+
+                        } else {
+
+                            status.className =
+                                "status error";
+
+
+                            status.style.display =
+                                "block";
+
+
+                            status.innerText =
+                                "✕ Payment verification failed.";
+
+
+                            await loadAuditLogs();
+
+                        }
+
+
+                    } catch (error) {
+
+                        console.error(error);
+
+
+                        status.className =
+                            "status error";
+
+
+                        status.style.display =
+                            "block";
+
+
+                        status.innerText =
+                            "✕ Could not verify payment.";
+
+
+                        await loadAuditLogs();
+
+                    }
+
+                },
+
+
+            modal: {
+
+                ondismiss:
+                    function() {
+
+                        status.className =
+                            "status error";
+
+
+                        status.style.display =
+                            "block";
+
+
+                        status.innerText =
+                            "Payment cancelled. Your cart is safe.";
+
+                    }
+
+            },
+
+
+            theme: {
+
+                color:
+                    "#5b8cff"
+
+            }
+
+        };
+
+
+        const razorpay =
+            new Razorpay(options);
+
+
+        razorpay.open();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        status.className =
+            "status error";
+
+
+        status.style.display =
+            "block";
+
+
+        status.innerText =
+            "✕ Unable to start payment. Please try again.";
+
+    }
+
+}
+
+
+
+/* =========================
+   AUDIT LOGS
+========================= */
+
+async function loadAuditLogs() {
+
+    const auditDiv =
+        document.getElementById(
+            "auditLogs"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/payment/audit"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load audit history"
+            );
+        }
+
+
+        const logs =
+            await response.json();
+
+        const totalTransactions = logs.length;
+
+const successfulPayments = logs.filter(
+    log => log.action === "PAYMENT_VERIFICATION"
+        && log.status === "VERIFIED"
+).length;
+
+const failedPayments = logs.filter(
+    log => log.action === "PAYMENT_VERIFICATION"
+        && log.status === "FAILED"
+).length;
+
+const ordersCreated = logs.filter(
+    log => log.action === "CREATE_PAYMENT_ORDER"
+).length;
+
+document.getElementById(
+    "totalTransactions"
+).innerText = totalTransactions;
+
+document.getElementById(
+    "successfulPayments"
+).innerText = successfulPayments;
+
+document.getElementById(
+    "failedPayments"
+).innerText = failedPayments;
+
+document.getElementById(
+    "ordersCreated"
+).innerText = ordersCreated;
+
+
+        auditDiv.innerHTML = "";
+
+
+        if (logs.length === 0) {
+
+            auditDiv.innerHTML = `
+
+                <p class="audit-empty">
+                    No payment activity yet.
+                </p>
+
+            `;
+
+            return;
+        }
+
+
+        logs
+            .slice()
+            .reverse()
+            .forEach(log => {
+
+
+                const div =
+                    document.createElement("div");
+
+
+                div.className =
+                    "audit-item";
+
+
+                let statusClass =
+                    "audit-created";
+
+
+                if (
+                    log.status ===
+                    "VERIFIED"
+                ) {
+
+                    statusClass =
+                        "audit-verified";
+
+                }
+
+
+                if (
+                    log.status ===
+                    "FAILED"
+                ) {
+
+                    statusClass =
+                        "audit-failed";
+
+                }
+
+
+                const amount =
+                    log.amount !== null
+                    ? "₹" + log.amount
+                    : "—";
+
+
+                const paymentId =
+                    log.paymentId !== null
+                    ? log.paymentId
+                    : "—";
+
+
+                const timestamp =
+                    log.timestamp
+                    ? log.timestamp
+                        .replace("T", " ")
+                    : "—";
+
+
+                div.innerHTML = `
+
+                    <div class="audit-header">
+
+                        <span class="audit-action">
+                            ${log.action}
+                        </span>
+
+                        <span
+                            class="
+                                audit-status
+                                ${statusClass}
+                            "
+                        >
+                            ${log.status}
+                        </span>
+
+                    </div>
+
+
+                    <div class="audit-details">
+
+                        <strong>Product:</strong>
+                        ${log.productName || "Cart"}
+
+                        <br>
+
+                        <strong>Amount:</strong>
+                        ${amount}
+
+                        <br>
+
+                        <strong>Order ID:</strong>
+                        ${log.orderId || "—"}
+
+                        <br>
+
+                        <strong>Payment ID:</strong>
+                        ${paymentId}
+
+                        <br>
+
+                        <strong>Time:</strong>
+                        ${timestamp}
+
+                    </div>
+
+                `;
+
+
+                auditDiv.appendChild(div);
+
+            });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        auditDiv.innerHTML = `
+
+            <div
+                class="status error"
+                style="display:block;"
+            >
+                ❌ Unable to load payment audit.
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+loadCart();
+
+loadAuditLogs();
+
+
+</script>
+
+</body>
+
+</html>
